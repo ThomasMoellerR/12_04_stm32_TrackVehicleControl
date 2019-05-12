@@ -1,0 +1,11 @@
+ser2.c:84:6:SER2_Ini	4	static
+ser2.c:98:8:ser2_XORChecksum	24	static
+ser2.c:112:6:SER2_Protocol_Handling	32	static
+ser2.c:220:8:SER2_u8Valid_Data	16	static
+ser2.c:244:6:SER2_Send_Protocol	24	static
+ser2.c:337:6:SER2_SndBuf_Put	16	static
+ser2.c:350:8:SER2_u8SndBuf_Get	16	static
+ser2.c:364:8:SER2_u8SndBuf_Empty	4	static
+ser2.c:376:6:SER2_RecBuf_Put	16	static
+ser2.c:389:8:SER2_u8RecBuf_Get	16	static
+ser2.c:403:8:SER2_u8RecBuf_Empty	4	static

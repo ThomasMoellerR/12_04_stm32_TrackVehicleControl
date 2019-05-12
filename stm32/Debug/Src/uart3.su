@@ -1,0 +1,2 @@
+uart3.c:57:6:UART3_Ini	8	static
+uart3.c:69:6:UART3_HAL_UART_RxCpltCallback	16	static
