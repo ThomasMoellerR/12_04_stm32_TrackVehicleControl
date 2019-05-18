@@ -174,6 +174,7 @@ void CTL_Ini (void)
 void CTL_Main (void)
 {
 
+  /*
   switch (ctl_State)
   {
   	  case NORMAL:
@@ -209,7 +210,7 @@ void CTL_Main (void)
   		  	  	  	  break;
 
   	  default: break;
-  }
+  }*/
 
 
 
@@ -224,6 +225,8 @@ void CTL_Main (void)
 	tystSteering stSteering;
 	TUINT16 u16Thro;
 	TUINT16 u16Elev;
+	TUINT8 u8FailSafe_LED_Blinking;
+	TUINT8 u8FailSafe_LED_Status;
 
 	// Thro
 	unAnyData.au8Data[0] = SER3_au8RecBuf[0];
@@ -235,10 +238,14 @@ void CTL_Main (void)
 	unAnyData.au8Data[1] = SER3_au8RecBuf[3];
 	u16Elev = unAnyData.u16Data;
 
+	// FailSafe
+	u8FailSafe_LED_Blinking = SER3_au8RecBuf[16];
+	u8FailSafe_LED_Status = SER3_au8RecBuf[17];
+
 	memset((char*)SER3_au8RecBuf, 0, sizeof(SER3_au8RecBuf));
 
 
-	if (((u16Thro >= 1070) && (u16Thro <= 1920)) && ((u16Elev >= 1070) && (u16Elev <= 1920)))
+	if (((u16Thro >= 1070) && (u16Thro <= 1920)) && ((u16Elev >= 1070) && (u16Elev <= 1920)) && ((u8FailSafe_LED_Blinking == 1) || (u8FailSafe_LED_Status == 1)))
 	{
 		ctl_State = NORMAL;
 		CTL_u32Timeout_Counter = 0;
@@ -250,7 +257,7 @@ void CTL_Main (void)
 		// Linker Motor
 		au8Temp[CMD] = SET_DIR_PWM;
 		au8Temp[DIRECTION] = stSteering.u8Motor_Left_Dir;
-		unAnyData.u16Data = stSteering.u16Motor_Left_Speed + 150;
+		unAnyData.u16Data = stSteering.u16Motor_Left_Speed * 5;
 		au8Temp[PWM + 0] = unAnyData.au8Data[0];
 		au8Temp[PWM + 1] = unAnyData.au8Data[1];
 		SER2_Send_Protocol(au8Temp, 4);
@@ -262,7 +269,7 @@ void CTL_Main (void)
 		// Rechter Motor
 		au8Temp[CMD] = SET_DIR_PWM;
 		au8Temp[DIRECTION] = stSteering.u8Motor_Right_Dir ? 0 : 1;
-		unAnyData.u16Data = stSteering.u16Motor_Right_Speed + 150;
+		unAnyData.u16Data = stSteering.u16Motor_Right_Speed * 5;
 		au8Temp[PWM + 0] = unAnyData.au8Data[0];
 		au8Temp[PWM + 1] = unAnyData.au8Data[1];
 		SER1_Send_Protocol(au8Temp, 4);
